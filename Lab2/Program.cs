@@ -10,7 +10,7 @@ namespace Lab2
 
             //IsBalanced("{ int a = new int[ ] ( ( ) ) }");
 
-            Evaluate("5 3 11 + -");
+            Console.WriteLine(Evaluate("10 2 8 * + 3 -"));
 
         }
 
@@ -31,7 +31,11 @@ namespace Lab2
                 // If closing symbol, then see if it matches the top
                 else if (c == '}' || c == '>' || c == ']' || c == ')')
                 {
-                    if( Matches(stack.Peek(), c) )
+                    if (stack.Count == 0)
+                    {
+                        return false;
+                    }
+                    else if(Matches(stack.Peek(), c) )
                     {
                         stack.Pop();
                     }
@@ -61,9 +65,37 @@ namespace Lab2
 
         private static bool Matches(char open, char close)
         {
-            // do the matching
+            switch (open)
+            {
+                case '[':
+                    if (close == ']')
+                    {
+                        return true;
+                    }
+                    break;
+                case '{':
+                    if (close == '}')
+                    {
+                        return true;
+                    }
+                    break;
+                case '(':
+                    if (close == ')')
+                    {
+                        return true;
+                    }
+                    break;
+                case '<':
+                    if (close == '>')
+                    {
+                        return true;
+                    }
+                    break;
+                default:
+                    return false;
+            }
 
-            return true;
+            return false;
         }
 
         // Evaluate("5 3 11 + -")	// returns -9
@@ -88,11 +120,48 @@ namespace Lab2
                     // Push the result on to stack
 
 
-            if( stack.Count != 1)
+            
+            foreach (string t in tokens)
+            {
+                if (t.Contains("0") || t.Contains("1") || t.Contains("2") || t.Contains("3") || t.Contains("4") || t.Contains("5") || t.Contains("6") || t.Contains("7") || t.Contains("8") || t.Contains("9"))
+                {
+                    int intT = int.Parse(t.ToString());
+                    stack.Push(intT);
+                }
+
+                else if (t == "+" || t == "-" || t == "*" || t == "/")
+                {
+                    if (stack.Count > 1)
+                    {
+                        double int2 = stack.Pop();
+                        double int1 = stack.Pop();
+                        if (t == "+")
+                        {
+                            stack.Push(int1 + int2);
+                        }
+                        else if (t == "-")
+                        {
+                            stack.Push(int1 - int2);
+                        }
+                        else if (t == "*")
+                        {
+                            stack.Push(int1 * int2);
+                        }
+                        else if (t == "/")
+                        {
+                            stack.Push(int1 / int2);
+                        }
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            if (stack.Count != 1)
             {
                 return null;
             }
-
             return stack.Pop();
         }
 
